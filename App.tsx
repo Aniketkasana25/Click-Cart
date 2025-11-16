@@ -1,5 +1,4 @@
-
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { CartItem, Product } from './types';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -7,6 +6,7 @@ import ProductGrid from './components/ProductGrid';
 import CategoryCarousel from './components/CategoryCarousel';
 import Footer from './components/Footer';
 import CartView from './components/CartView';
+import Spinner from './components/Spinner';
 import { PRODUCTS } from './constants';
 
 type View = 'home' | 'cart';
@@ -15,6 +15,19 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [view, setView] = useState<View>('home');
   const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Simulate fetching products from an API
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setProducts(PRODUCTS);
+      setIsLoading(false);
+    }, 1500); // 1.5 second delay
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
 
   const addToCart = useCallback((product: Product) => {
     setCart(prevCart => {
@@ -24,7 +37,8 @@ const App: React.FC = () => {
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
-        return [...prevCart, { ...product, quantity: 1 }];
+        // Ensure imageUrl is defined when adding to cart, even if it's an empty string, to prevent issues in CartView
+        return [...prevCart, { ...product, quantity: 1, imageUrl: product.imageUrl || '' }];
       }
     });
   }, []);
@@ -39,6 +53,14 @@ const App: React.FC = () => {
       );
     });
   }, []);
+  
+  const handleImageGenerated = useCallback((productId: number, imageUrl: string) => {
+    setProducts(prevProducts =>
+      prevProducts.map(p =>
+        p.id === productId ? { ...p, imageUrl } : p
+      )
+    );
+  }, []);
 
   const handleLogoClick = () => {
     setView('home');
@@ -47,7 +69,7 @@ const App: React.FC = () => {
 
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
-  const filteredProducts = PRODUCTS.filter(product =>
+  const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -68,12 +90,17 @@ const App: React.FC = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800 my-6">
               {searchQuery ? 'Search Results' : 'Bestsellers'}
             </h2>
-            {filteredProducts.length > 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64">
+                <Spinner />
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <ProductGrid 
                 products={filteredProducts} 
                 cart={cart}
                 addToCart={addToCart}
                 updateQuantity={updateQuantity}
+                onImageGenerated={handleImageGenerated}
               />
             ) : (
                <div className="text-center py-10">

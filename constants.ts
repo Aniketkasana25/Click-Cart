@@ -3,11 +3,11 @@ import { Product } from './types';
 export const PRODUCTS: Product[] = [
   { id: 1, name: 'Mother Dairy Classic Curd', weight: '400 g', price: 34, imageUrl: 'https://m.media-amazon.com/images/I/51zOMI+b+QL._AC_UF1000,1000_QL80_.jpg', category: 'Dairy & Bread' },
   { id: 2, name: 'Harvest Gold White Bread', weight: '400 g', price: 30, imageUrl: 'https://harvestgold.in/image/product/small/2-White-Bread.png', category: 'Dairy & Bread' },
-  { id: 3, name: 'Amul Masti Buttermilk', weight: '1 L', price: 55, imageUrl: 'https://www.jiomart.com/images/product/original/490000078/amul-masti-buttermilk-1-l-tetra-pak-product-images-o490000078-p490000078-0-202203170422.jpg', category: 'Dairy & Bread' },
+  { id: 3, name: 'Amul Masti Buttermilk', weight: '1 L', price: 55, category: 'Dairy & Bread' },
   { id: 4, name: 'Nestle Milkmaid', weight: '380 g', price: 139, imageUrl: 'https://www.jiomart.com/images/product/original/490000171/nestle-milkmaid-sweetened-condensed-milk-380-g-tin-product-images-o490000171-p490000171-0-202305261546.jpg', category: 'Dairy & Bread' },
   
   { id: 5, name: 'Onion', weight: '1 kg', price: 40, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/10000148_30-fresho-onion.jpg', category: 'Fruits & Vegetables' },
-  { id: 6, name: 'Tomato', weight: '1 kg', price: 35, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/10000200_17-fresho-tomato-hybrid.jpg', category: 'Fruits & Vegetables' },
+  { id: 6, name: 'Tomato', weight: '1 kg', price: 35, category: 'Fruits & Vegetables' },
   { id: 7, name: 'Potato', weight: '1 kg', price: 30, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/40048457_9-fresho-potato-new-crop.jpg', category: 'Fruits & Vegetables' },
   { id: 8, name: 'Banana', weight: '1 dozen', price: 60, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/10000031_21-fresho-banana-robusta.jpg', category: 'Fruits & Vegetables' },
 

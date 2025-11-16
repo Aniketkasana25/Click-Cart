@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Product, CartItem } from '../types';
 import ProductCard from './ProductCard';
@@ -8,9 +7,10 @@ interface ProductGridProps {
   cart: CartItem[];
   addToCart: (product: Product) => void;
   updateQuantity: (productId: number, quantity: number) => void;
+  onImageGenerated: (productId: number, imageUrl: string) => void;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, cart, addToCart, updateQuantity }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ products, cart, addToCart, updateQuantity, onImageGenerated }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
       {products.map(product => {
@@ -22,6 +22,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, cart, addToCart, up
             cartItem={cartItem}
             addToCart={addToCart}
             updateQuantity={updateQuantity}
+            onImageGenerated={onImageGenerated}
           />
         );
       })}
