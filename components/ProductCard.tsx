@@ -74,9 +74,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, cartItem, addToCart,
   };
 
   return (
-    <div className="bg-white border rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col justify-between transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:border-green-300">
       <div>
-        <div className="bg-gray-100 rounded-lg mb-4 flex items-center justify-center h-32 sm:h-40">
+        <div className="bg-gray-100 rounded-lg mb-2 flex items-center justify-center h-32 sm:h-40">
           {isGenerating ? (
             <Spinner />
           ) : product.imageUrl ? (
@@ -92,8 +92,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, cartItem, addToCart,
           )}
         </div>
         {error && <p className="text-red-500 text-xs text-center mb-2">{error}</p>}
-        <p className="text-xs text-gray-500">{product.weight}</p>
-        <h3 className="font-semibold text-gray-800 mt-1 h-10">{product.name}</h3>
+        <p className="text-xs text-gray-500 mb-1">{product.weight}</p>
+        <h3 className="font-semibold text-gray-800 h-10">{product.name}</h3>
       </div>
       <div className="flex justify-between items-center mt-4">
         <p className="text-lg font-bold">₹{product.price}</p>
