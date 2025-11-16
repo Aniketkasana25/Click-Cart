@@ -1,5 +1,5 @@
-
-import React from 'react';
+import React, { useState } from 'react';
+import { Product } from '../types';
 
 const LocationIcon: React.FC = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -26,9 +26,15 @@ interface HeaderProps {
   onLogoClick: () => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  suggestions: Product[];
+  onSuggestionClick: (product: Product) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick, searchQuery, onSearchChange }) => {
+const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick, searchQuery, onSearchChange, suggestions, onSuggestionClick }) => {
+  const [isFocused, setIsFocused] = useState(false);
+  
+  const showSuggestions = isFocused && suggestions.length > 0;
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -59,7 +65,24 @@ const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick
                 className="w-full bg-gray-100 rounded-lg py-3 pl-10 pr-4 border border-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow click on suggestion
               />
+              {showSuggestions && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <ul>
+                    {suggestions.map(product => (
+                      <li 
+                        key={product.id}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => onSuggestionClick(product)}
+                      >
+                        {product.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
           

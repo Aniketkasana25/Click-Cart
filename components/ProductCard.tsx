@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Product, CartItem } from '../types';
 import { GoogleGenAI, Modality } from "@google/genai";
 import Spinner from './Spinner';
+import Fuse from 'fuse.js';
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +10,7 @@ interface ProductCardProps {
   addToCart: (product: Product) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   onImageGenerated: (productId: number, imageUrl: string) => void;
+  matches?: readonly Fuse.FuseResultMatch[];
 }
 
 const AddButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
@@ -28,7 +30,39 @@ const QuantityControl: React.FC<{ quantity: number; onUpdate: (newQuantity: numb
     </div>
 );
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, cartItem, addToCart, updateQuantity, onImageGenerated }) => {
+const HighlightedName: React.FC<{ text: string; matches?: readonly Fuse.FuseResultMatch[] }> = ({ text, matches }) => {
+  if (!matches || matches.length === 0) {
+    return <>{text}</>;
+  }
+
+  const nameMatch = matches.find(m => m.key === 'name');
+  if (!nameMatch || !nameMatch.indices || nameMatch.indices.length === 0) {
+    return <>{text}</>;
+  }
+  
+  const parts: (string | React.ReactNode)[] = [];
+  let lastIndex = 0;
+
+  nameMatch.indices.forEach(([start, end]) => {
+    if (start > lastIndex) {
+      parts.push(text.substring(lastIndex, start));
+    }
+    parts.push(
+      <mark key={start} className="bg-green-200 rounded-sm px-0.5 font-bold text-gray-800">
+        {text.substring(start, end + 1)}
+      </mark>
+    );
+    lastIndex = end + 1;
+  });
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return <>{parts}</>;
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, cartItem, addToCart, updateQuantity, onImageGenerated, matches }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,7 +127,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, cartItem, addToCart,
         </div>
         {error && <p className="text-red-500 text-xs text-center mb-2">{error}</p>}
         <p className="text-xs text-gray-500 mb-1">{product.weight}</p>
-        <h3 className="font-semibold text-gray-800 h-10">{product.name}</h3>
+        <h3 className="font-semibold text-gray-800 h-10">
+          <HighlightedName text={product.name} matches={matches} />
+        </h3>
       </div>
       <div className="flex justify-between items-center mt-4">
         <p className="text-lg font-bold">₹{product.price}</p>

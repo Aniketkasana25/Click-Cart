@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { CartItem, Product } from './types';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -9,6 +9,7 @@ import CartView from './components/CartView';
 import Spinner from './components/Spinner';
 import { PRODUCTS, CATEGORIES } from './constants';
 import CategoryFilter from './components/CategoryFilter';
+import Fuse from 'fuse.js';
 
 type View = 'home' | 'cart';
 
@@ -19,6 +20,17 @@ const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [suggestions, setSuggestions] = useState<Fuse.FuseResult<Product>[]>([]);
+
+  const fuse = useMemo(() => {
+    if (products.length === 0) return null;
+    return new Fuse(products, {
+      keys: ['name', 'category'],
+      threshold: 0.4,
+      minMatchCharLength: 2,
+      includeMatches: true,
+    });
+  }, [products]);
 
   useEffect(() => {
     // Simulate fetching products from an API
@@ -39,7 +51,6 @@ const App: React.FC = () => {
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
-        // Ensure imageUrl is defined when adding to cart, even if it's an empty string, to prevent issues in CartView
         return [...prevCart, { ...product, quantity: 1, imageUrl: product.imageUrl || '' }];
       }
     });
@@ -64,21 +75,43 @@ const App: React.FC = () => {
     );
   }, []);
 
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    if (fuse && query.length > 1) {
+        const results = fuse.search(query, { limit: 5 });
+        setSuggestions(results);
+    } else {
+        setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (product: Product) => {
+    setSearchQuery(product.name);
+    setSuggestions([]);
+  };
+
   const handleLogoClick = () => {
     setView('home');
-    setSearchQuery(''); // Reset search when going home
-    setSelectedCategory('All'); // Reset category filter
+    setSearchQuery(''); 
+    setSelectedCategory('All');
+    setSuggestions([]);
   };
 
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
-  const filteredProducts = products
-    .filter(product =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .filter(product =>
-      selectedCategory === 'All' || product.category === selectedCategory
-    );
+  const filteredProductsWithMatches = useMemo(() => {
+    const categoryFilteredProducts = products.filter(p => selectedCategory === 'All' || p.category === selectedCategory);
+
+    if (!searchQuery.trim() || !fuse) {
+      return categoryFilteredProducts.map(p => ({ item: p, matches: [] }));
+    }
+
+    const searchResults = fuse.search(searchQuery);
+    const searchResultIds = new Set(searchResults.map(r => r.item.id));
+    
+    // Filter the search results by the already category-filtered products
+    return searchResults.filter(r => (selectedCategory === 'All' || r.item.category === selectedCategory));
+  }, [searchQuery, fuse, products, selectedCategory]);
   
   const categoryNames = ['All', ...CATEGORIES.map(c => c.name)];
 
@@ -89,7 +122,9 @@ const App: React.FC = () => {
         onCartClick={() => setView('cart')} 
         onLogoClick={handleLogoClick}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={handleSearchChange}
+        suggestions={suggestions.map(s => s.item)}
+        onSuggestionClick={handleSuggestionClick}
       />
       <main className="flex-grow container mx-auto px-4 py-6">
         {view === 'home' ? (
@@ -110,9 +145,9 @@ const App: React.FC = () => {
               <div className="flex justify-center items-center h-64">
                 <Spinner />
               </div>
-            ) : filteredProducts.length > 0 ? (
+            ) : filteredProductsWithMatches.length > 0 ? (
               <ProductGrid 
-                products={filteredProducts} 
+                productsWithMatches={filteredProductsWithMatches} 
                 cart={cart}
                 addToCart={addToCart}
                 updateQuantity={updateQuantity}

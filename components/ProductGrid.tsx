@@ -1,24 +1,26 @@
 import React from 'react';
 import { Product, CartItem } from '../types';
 import ProductCard from './ProductCard';
+import Fuse from 'fuse.js';
 
 interface ProductGridProps {
-  products: Product[];
+  productsWithMatches: { item: Product, matches?: readonly Fuse.FuseResultMatch[] }[];
   cart: CartItem[];
   addToCart: (product: Product) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   onImageGenerated: (productId: number, imageUrl: string) => void;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, cart, addToCart, updateQuantity, onImageGenerated }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ productsWithMatches, cart, addToCart, updateQuantity, onImageGenerated }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-      {products.map(product => {
-        const cartItem = cart.find(item => item.id === product.id);
+      {productsWithMatches.map(({ item, matches }) => {
+        const cartItem = cart.find(cartItem => cartItem.id === item.id);
         return (
           <ProductCard 
-            key={product.id}
-            product={product}
+            key={item.id}
+            product={item}
+            matches={matches}
             cartItem={cartItem}
             addToCart={addToCart}
             updateQuantity={updateQuantity}
