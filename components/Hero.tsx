@@ -5,8 +5,8 @@ const Hero: React.FC = () => {
     <div className="w-full my-6">
       <div className="bg-gray-200 rounded-2xl overflow-hidden">
         <img 
-          src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2022-05/Group-33704.jpg" 
-          alt="Promotional Banner" 
+          src="https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=2700/layout-engine/2023-07/electronics-WEB.jpg" 
+          alt="Electronics Store Banner" 
           className="w-full h-auto object-cover"
         />
       </div>
