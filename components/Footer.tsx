@@ -4,7 +4,7 @@ import React from 'react';
 const Footer: React.FC = () => {
   const footerSections = {
     'Useful Links': ['About', 'Careers', 'Blog', 'Press', 'Lead', 'Values'],
-    'Categories': ['Vegetables & Fruits', 'Dairy & Breakfast', 'Munchies', 'Cold Drinks & Juices', 'Instant & Frozen Food', 'Tea, Coffee & Health Drinks'],
+    'Categories': ['Vegetables & Fruits', 'Dairy & Breakfast', 'Snacks', 'Electronics', 'Cold Drinks & Juices', 'Tea, Coffee & Health Drinks'],
     'Help': ['FAQs', 'Contact Us', 'Terms & Conditions', 'Privacy Policy', 'Caution Notice'],
   };
 

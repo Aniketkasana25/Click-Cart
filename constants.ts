@@ -20,6 +20,13 @@ export const PRODUCTS: Product[] = [
   { id: 14, name: 'Tropicana 100% Orange Juice', weight: '1 L', price: 135, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/1204558_3-tropicana-100-juice-orange.jpg', category: 'Beverages' },
   { id: 15, name: 'Tata Tea Gold', weight: '500 g', price: 290, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/40019245_1-tata-tea-gold-tea.jpg', category: 'Beverages' },
   { id: 16, name: 'Nescafe Classic Coffee', weight: '100 g', price: 320, imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/40005206_11-nescafe-classic-100-pure-instant-coffee.jpg', category: 'Beverages' },
+  
+  { id: 17, name: 'boAt BassHeads 100 Wired Earphones', weight: '1 unit', price: 399, imageUrl: 'https://www.boat-lifestyle.com/cdn/shop/products/e5515325-c33f-42a9-a417-23b093f18074_600x.png', category: 'Electronics' },
+  { id: 18, name: 'Samsung 25W USB-C Fast Charger', weight: '1 unit', price: 1299, imageUrl: 'https://images.samsung.com/is/image/samsung/p6pim/in/ep-ta800nbegin/gallery/in-25w-travel-adapter-ep-ta800nbegin-536852932?$650_519_PNG$', category: 'Electronics' },
+  { id: 19, name: 'Duracell AA Batteries (Pack of 4)', weight: '4 pack', price: 120, imageUrl: 'https://m.media-amazon.com/images/I/71uA-022-SL._SX522_.jpg', category: 'Electronics' },
+  { id: 20, name: 'SanDisk Ultra 64GB MicroSD Card', weight: '1 unit', price: 499, imageUrl: 'https://m.media-amazon.com/images/I/61jhzv9f-mL._SX522_.jpg', category: 'Electronics' },
+  { id: 21, name: 'Mi Power Bank 3i 20000mAh', weight: '1 unit', price: 2199, imageUrl: 'https://i01.appmifile.com/webfile/globalimg/in/cms/531A334B-2904-5852-52A9-E20955899166.jpg', category: 'Electronics' },
+  { id: 22, name: 'Noise ColorFit Pulse Smartwatch', weight: '1 unit', price: 1799, imageUrl: 'https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main_3_95942816-3528-43d9-95f3-80251307612f.png', category: 'Electronics' },
 ];
 
 export const CATEGORIES = [
@@ -27,8 +34,7 @@ export const CATEGORIES = [
     { name: 'Fruits & Vegetables', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/10000150_19-fresho-potato.jpg' },
     { name: 'Snacks', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/294273_20-lays-potato-chips-indias-magic-masala.jpg' },
     { name: 'Beverages', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/265895_12-coca-cola-soft-drink.jpg' },
-    { name: 'Masala & Dry Fruits', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/40026362_12-bingo-mad-angles-achaari-masti.jpg' },
-    { name: 'Sweet Cravings', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/40018519_15-cadbury-dairy-milk-chocolate-bar.jpg' },
+    { name: 'Electronics', imageUrl: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
     { name: 'Cleaning Essentials', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/266949_7-harpic-disinfectant-toilet-cleaner-liquid-original.jpg' },
     { name: 'Home Needs', imageUrl: 'https://www.bigbasket.com/media/uploads/p/l/10000424_12-colgate-strong-teeth-anticavity-toothpaste-with-amino-shakti.jpg' }
 ];
