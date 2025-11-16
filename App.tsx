@@ -7,7 +7,8 @@ import CategoryCarousel from './components/CategoryCarousel';
 import Footer from './components/Footer';
 import CartView from './components/CartView';
 import Spinner from './components/Spinner';
-import { PRODUCTS } from './constants';
+import { PRODUCTS, CATEGORIES } from './constants';
+import CategoryFilter from './components/CategoryFilter';
 
 type View = 'home' | 'cart';
 
@@ -17,6 +18,7 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   useEffect(() => {
     // Simulate fetching products from an API
@@ -65,16 +67,23 @@ const App: React.FC = () => {
   const handleLogoClick = () => {
     setView('home');
     setSearchQuery(''); // Reset search when going home
+    setSelectedCategory('All'); // Reset category filter
   };
 
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProducts = products
+    .filter(product =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter(product =>
+      selectedCategory === 'All' || product.category === selectedCategory
+    );
+  
+  const categoryNames = ['All', ...CATEGORIES.map(c => c.name)];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header 
         cartItemCount={cartItemCount} 
         onCartClick={() => setView('cart')} 
@@ -87,9 +96,16 @@ const App: React.FC = () => {
           <>
             <Hero />
             <CategoryCarousel />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 my-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mt-8 mb-4">
               {searchQuery ? 'Search Results' : 'Bestsellers'}
             </h2>
+            
+            <CategoryFilter
+              categories={categoryNames}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
                 <Spinner />
@@ -104,7 +120,7 @@ const App: React.FC = () => {
               />
             ) : (
                <div className="text-center py-10">
-                <p className="text-lg text-gray-600">No products found for "{searchQuery}"</p>
+                <p className="text-lg text-gray-600">No products found matching your criteria.</p>
               </div>
             )}
           </>
