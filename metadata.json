@@ -1,0 +1,5 @@
+{
+  "name": "Click & Cart",
+  "description": "A frontend replica of an online grocery store, focusing on the experience of browsing products, adding them to a cart, and simulating a checkout process. Built with React, TypeScript, and Tailwind CSS.",
+  "requestFramePermissions": []
+}
