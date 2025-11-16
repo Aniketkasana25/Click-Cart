@@ -14,6 +14,7 @@ type View = 'home' | 'cart';
 const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [view, setView] = useState<View>('home');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const addToCart = useCallback((product: Product) => {
     setCart(prevCart => {
@@ -39,23 +40,46 @@ const App: React.FC = () => {
     });
   }, []);
 
+  const handleLogoClick = () => {
+    setView('home');
+    setSearchQuery(''); // Reset search when going home
+  };
+
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
+
+  const filteredProducts = PRODUCTS.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header cartItemCount={cartItemCount} onCartClick={() => setView('cart')} onLogoClick={() => setView('home')} />
+      <Header 
+        cartItemCount={cartItemCount} 
+        onCartClick={() => setView('cart')} 
+        onLogoClick={handleLogoClick}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
       <main className="flex-grow container mx-auto px-4 py-6">
         {view === 'home' ? (
           <>
             <Hero />
             <CategoryCarousel />
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 my-6">Bestsellers</h2>
-            <ProductGrid 
-              products={PRODUCTS} 
-              cart={cart}
-              addToCart={addToCart}
-              updateQuantity={updateQuantity}
-            />
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 my-6">
+              {searchQuery ? 'Search Results' : 'Bestsellers'}
+            </h2>
+            {filteredProducts.length > 0 ? (
+              <ProductGrid 
+                products={filteredProducts} 
+                cart={cart}
+                addToCart={addToCart}
+                updateQuantity={updateQuantity}
+              />
+            ) : (
+               <div className="text-center py-10">
+                <p className="text-lg text-gray-600">No products found for "{searchQuery}"</p>
+              </div>
+            )}
           </>
         ) : (
           <CartView 

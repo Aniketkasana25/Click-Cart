@@ -24,9 +24,11 @@ interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
   onLogoClick: () => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick }) => {
+const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick, searchQuery, onSearchChange }) => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4">
@@ -55,6 +57,8 @@ const Header: React.FC<HeaderProps> = ({ cartItemCount, onCartClick, onLogoClick
                 type="text" 
                 placeholder='Search "milk"'
                 className="w-full bg-gray-100 rounded-lg py-3 pl-10 pr-4 border border-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
               />
             </div>
           </div>
